@@ -47,11 +47,10 @@ async def on_ready():
 async def on_message(message):
     t = message.guild.id
     if t not in dict1: dict1[t]=[]
-    if message.content.startswith("$"):
-      await message.add_reaction("👍")
     if message.author == client.user:
         return
     if message.content.startswith("$film") or message.content.startswith("$tv"):
+      await message.add_reaction("👍")
       a = message.content[3:]
       result = movie(a)
       embedVar = discord.Embed(title=str(result[3]), description=str(result[0]),color=0xF6BE00) 
@@ -59,6 +58,7 @@ async def on_message(message):
       embedVar.set_thumbnail(url=result[2])
       await message.channel.send(embed=embedVar)
     if message.content.startswith("$list"):
+      await message.add_reaction("👍")
       a = message.content[3:]
       result = person(a)
       result = result.replace("()","")
@@ -66,6 +66,7 @@ async def on_message(message):
       embedVar.add_field(name="Filmography", value=result, inline=False)
       await message.channel.send(embed=embedVar)
     if message.content.startswith("$top"):
+      await message.add_reaction("👍")
       a = message.content[5:]
       result = top(a)
       if a=="popular":
@@ -74,6 +75,7 @@ async def on_message(message):
       embedVar.add_field(name="Top {0}".format(a.capitalize()), value=result, inline=False)
       await message.channel.send(embed=embedVar)
     if message.content.startswith("$help"):
+        await message.add_reaction("👍")
         embedVar = discord.Embed(title="", description="",color=0xF6BE00)
         embedVar.add_field(name="$film", value="to search about film", inline=False)
         embedVar.add_field(name="$tv", value="to search about tv show", inline=False)
@@ -87,17 +89,20 @@ async def on_message(message):
         embedVar.add_field(name="$clear", value="to clear Watchlist", inline=False)
         await message.channel.send(embed=embedVar)
     if message.content.startswith("$add"):
+      await message.add_reaction("👍")
       a = message.content[4:]
       a = str(ia.search_movie(a)[0])
       if a not in dict1[t]: 
         dict1[t]+=[a]
     if message.content.startswith("$del"):
+      await message.add_reaction("👍")
       a = message.content[4:]
       a = str(ia.search_movie(a)[0])
       temp = dict1[t]
       temp.remove(a)
       dict1[t]=temp
     if message.content.startswith("$view"):
+      await message.add_reaction("👍")
       a = dict1[t]
       if a == [] :  result = "None"
       else : result = "\n".join(a)
@@ -105,6 +110,7 @@ async def on_message(message):
       embedVar.add_field(name="Watchlist", value=result, inline=False)
       await message.channel.send(embed=embedVar)
     if message.content.startswith("$clear"):
+      await message.add_reaction("👍")
       dict1[t]=[]
 keep_alive()
 client.run(os.getenv("TOKEN"))
