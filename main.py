@@ -92,23 +92,23 @@ async def on_message(message):
       f.seek(0)
       await message.add_reaction("👍")
       a = message.content[4:]
-      a = "\n" + str(ia.search_movie(a)[0])
+      a = str(ia.search_movie(a)[0]) + "\n"
       if a in f.readlines() : pass
       else : f.write(a)
     if message.content.startswith("$del"):
       f.seek(0) 
       await message.add_reaction("👍")
       a = message.content[4:]
-      a = str(ia.search_movie(a))
+      a = str(ia.search_movie(a)) + "\n"
       temp = f.readlines()
-      temp = [i for i in temp if i!="\n"+a]
+      temp = [i for i in temp if i!=a]
       f.truncate(0)
       for i in temp: f.write(i)
     if message.content.startswith("$view"):
       f.seek(0)
       await message.add_reaction("👍")
       a = [i.replace("\n",'') for i in f.readlines()]
-      result = "\n".join(set(a))
+      result = "\n".join(a)
       if result=="": result="None"
       embedVar = discord.Embed(title="", description="",color=0xF6BE00)
       embedVar.add_field(name="Watchlist", value=result, inline=False)
