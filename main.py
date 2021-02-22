@@ -38,15 +38,15 @@ def top(a):
   str1=''
   for i in t[:10]: str1+='{0}\n'.format(i)
   return str1
-dict1=dict()
+
 @client.event
 async def on_ready():
   print('We have logged in as {0.user}'.format(client))
   await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="$help"))
 @client.event
 async def on_message(message):
-    t = message.guild.id
-    if t not in dict1: dict1[t]=[]
+    file = str(message.guild.id) + ".txt"
+    f= open(file,"a+")
     if message.author == client.user:
         return
     if message.content.startswith("$film") or message.content.startswith("$tv"):
@@ -89,28 +89,33 @@ async def on_message(message):
         embedVar.add_field(name="$clear", value="to clear Watchlist", inline=False)
         await message.channel.send(embed=embedVar)
     if message.content.startswith("$add"):
+      f.seek(0)
       await message.add_reaction("👍")
       a = message.content[4:]
-      a = str(ia.search_movie(a)[0])
-      if a not in dict1[t]: 
-        dict1[t]+=[a]
+      a = "\n" + str(ia.search_movie(a)[0])
+      if a in f.readlines() : pass
+      else : f.write(a)
     if message.content.startswith("$del"):
+      f.seek(0) 
       await message.add_reaction("👍")
       a = message.content[4:]
-      a = str(ia.search_movie(a)[0])
-      temp = dict1[t]
-      temp.remove(a)
-      dict1[t]=temp
+      a = str(ia.search_movie(a))
+      temp = f.readlines()
+      temp = [i for i in temp if i!="\n"+a]
+      f.truncate(0)
+      for i in temp: f.write(i)
     if message.content.startswith("$view"):
+      f.seek(0)
       await message.add_reaction("👍")
-      a = dict1[t]
-      if a == [] :  result = "None"
-      else : result = "\n".join(a)
+      a = [i.replace("\n",'') for i in f.readlines()]
+      result = "\n".join(set(a))
+      if result=="": result="None"
       embedVar = discord.Embed(title="", description="",color=0xF6BE00)
       embedVar.add_field(name="Watchlist", value=result, inline=False)
       await message.channel.send(embed=embedVar)
     if message.content.startswith("$clear"):
+      f.seek(0)
       await message.add_reaction("👍")
-      dict1[t]=[]
+      f.truncate(0)
 keep_alive()
 client.run(os.getenv("TOKEN"))
