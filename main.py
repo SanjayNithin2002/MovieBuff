@@ -42,6 +42,7 @@ def person(a):
         if index == 11: break
         str2+="{0}.{1}\n".format(index,movie_name["title"])
   return str2
+
 @client.event
 async def on_ready():
   print('We have logged in as {0.user}'.format(client))
@@ -92,13 +93,13 @@ async def on_message(message):
     if message.content.startswith("$help"):
         await message.add_reaction("👍")
         embedVar = discord.Embed(title="", description="",color=0xC8E6C9)
-        embedVar.add_field(name="$film", value="to search about film", inline=False)
-        embedVar.add_field(name="$tv", value="to search about tv show", inline=False)
-        embedVar.add_field(name="$list", value="to get filmography of a person", inline=False)
-        embedVar.add_field(name="$add", value="to add to Watchlist", inline=False)
-        embedVar.add_field(name="$view", value="to view Watchlist", inline=False)
-        embedVar.add_field(name="$del", value="to remove from Watchlist", inline=False)
-        embedVar.add_field(name="$clear", value="to clear Watchlist", inline=False)
+        embedVar.add_field(name="$film", value="to search about a film", inline=False)
+        embedVar.add_field(name="$tv", value="to search about a tv show", inline=False)
+        embedVar.add_field(name="$list", value="to get the filmography of a person", inline=False)
+        embedVar.add_field(name="$add", value="to add to watchlist", inline=False)
+        embedVar.add_field(name="$view", value="to view watchlist", inline=False)
+        embedVar.add_field(name="$del", value="to remove from watchlist", inline=False)
+        embedVar.add_field(name="$clear", value="to clear watchlist", inline=False)
         await message.channel.send(embed=embedVar)
 
     if message.content.startswith("$add"):
