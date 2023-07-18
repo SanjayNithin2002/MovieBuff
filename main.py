@@ -64,8 +64,7 @@ async def on_message(message):
 
       if result: 
           await message.add_reaction("👍")
-          a = a.title()
-          embedVar = discord.Embed(title=a, description=result, color=0xC8E6C9)
+          embedVar = discord.Embed(title=str(result[3]), description=str(result[0]),color=0xFFCDD2) 
           embedVar.set_footer(text=result[1])
           embedVar.set_thumbnail(url=result[2])
           await message.channel.send(embed=embedVar)
@@ -83,7 +82,7 @@ async def on_message(message):
 
       if result: 
           await message.add_reaction("👍")
-          a = a.title()
+          result = result.replace("()","")
           embedVar = discord.Embed(title="", description="",color=0xFFCDD2)
           embedVar.add_field(name="Filmography", value=result, inline=False)
           await message.channel.send(embed=embedVar)
@@ -112,10 +111,9 @@ async def on_message(message):
           embed = discord.Embed(title="Page Unavailable", description="Try different prompt.", color=0xFFCDD2)
           await message.channel.send(embed=embed)
 
-
     if message.content.startswith("$help"):
         await message.add_reaction("👍")
-        embedVar = discord.Embed(title="", description="",color=0xF6BE00)
+        embedVar = discord.Embed(title="", description="",color=0xFFCDD2)
         embedVar.add_field(name="$film", value="to search about film", inline=False)
         embedVar.add_field(name="$tv", value="to search about tv show", inline=False)
         embedVar.add_field(name="$list", value="to get filmography of a person", inline=False)
@@ -152,7 +150,7 @@ async def on_message(message):
       a = [i.replace("\n",'') for i in f.readlines()]
       result = "\n".join(a)
       if result=="": result="None"
-      embedVar = discord.Embed(title="", description="",color=0xF6BE00)
+      embedVar = discord.Embed(title="", description="",color=0xFFCDD2)
       embedVar.add_field(name="Watchlist", value=result, inline=False)
       await message.channel.send(embed=embedVar)
 
