@@ -20,30 +20,28 @@ def movie(a):
 
 def person(a):
   b = ia.search_person(a)[0]
+  print(b)
   str1 = ia.get_person_filmography(b.personID)
   str2=""
+  index = 0
+  for movie_name in str1['data']['filmography']['director']:
+      index+=1
+      str2+="{0}.{1}\n".format(index,movie_name["title"])
   try:
-    for index in range(10):
-      movie_name = str1['data']['filmography']['actor'][index]
-      str2+="{0}.{1}\n".format(index+1,movie_name)
+    for movie_name in str1['data']['filmography']['actor']:
+      index+=1
+      str2+="{0}.{1}\n".format(index,movie_name["title"])
   except KeyError:
     try :
-      for index in range(10):
-        movie_name = str1['data']['filmography']['director'][index]
-        str2+="{0}.{1}\n".format(index+1,movie_name)
-    except KeyError:
-      for index in range(10):
-        movie_name = str1['data']['filmography']['actress'][index]
-        str2+="{0}.{1}\n".format(index+1,movie_name)
-  return str2
+      for movie_name in str1['data']['filmography']['director']:
+        index+=1
+        str2+="{0}.{1}\n".format(index,movie_name["title"])
 
-def top(a):
-  if a=='movies': t = ia.get_top250_movies()
-  if a=='shows': t = ia.get_top250_tv()
-  if a=='popular': t = ia.get_popular100_movies()
-  str1=''
-  for i in t[:10]: str1+='{0}\n'.format(i)
-  return str1
+    except KeyError:
+      for movie_name in str1['data']['filmography']['actress']:
+        index+=1
+        str2+="{0}.{1}\n".format(index,movie_name["title"])
+  return str2
 
 @client.event
 async def on_ready():
@@ -64,7 +62,7 @@ async def on_message(message):
 
       if result: 
           await message.add_reaction("👍")
-          embedVar = discord.Embed(title=str(result[3]), description=str(result[0]),color=0xFFCDD2) 
+          embedVar = discord.Embed(title=str(result[3]), description=str(result[0]),color=0xC8E6C9) 
           embedVar.set_footer(text=result[1])
           embedVar.set_thumbnail(url=result[2])
           await message.channel.send(embed=embedVar)
@@ -83,27 +81,8 @@ async def on_message(message):
       if result: 
           await message.add_reaction("👍")
           result = result.replace("()","")
-          embedVar = discord.Embed(title="", description="",color=0xFFCDD2)
+          embedVar = discord.Embed(title="", description="",color=0xC8E6C9)
           embedVar.add_field(name="Filmography", value=result, inline=False)
-          await message.channel.send(embed=embedVar)
-           
-      else:
-          await message.add_reaction("👎")
-          embed = discord.Embed(title="Page Unavailable", description="Try different prompt.", color=0xFFCDD2)
-          await message.channel.send(embed=embed)
-
-
-    if message.content.startswith("$top"):
-      await message.add_reaction("👍")
-      a = message.content[5:]
-      result = top(a)
-      if a=="popular":
-        a += " movies"
-    
-      if result: 
-          await message.add_reaction("👍")
-          embedVar = discord.Embed(title="", description="",color=0xFFCDD2)
-          embedVar.add_field(name="Top {0}".format(a.capitalize()), value=result, inline=False)
           await message.channel.send(embed=embedVar)
            
       else:
@@ -113,13 +92,10 @@ async def on_message(message):
 
     if message.content.startswith("$help"):
         await message.add_reaction("👍")
-        embedVar = discord.Embed(title="", description="",color=0xFFCDD2)
+        embedVar = discord.Embed(title="", description="",color=0xC8E6C9)
         embedVar.add_field(name="$film", value="to search about film", inline=False)
         embedVar.add_field(name="$tv", value="to search about tv show", inline=False)
         embedVar.add_field(name="$list", value="to get filmography of a person", inline=False)
-        embedVar.add_field(name="$top movies", value="to get top 10 movies", inline=False)
-        embedVar.add_field(name="$top shows", value="to get top 10 shows", inline=False)
-        embedVar.add_field(name="$top popular", value="to get popular movies", inline=False)
         embedVar.add_field(name="$add", value="to add to Watchlist", inline=False)
         embedVar.add_field(name="$view", value="to view Watchlist", inline=False)
         embedVar.add_field(name="$del", value="to remove from Watchlist", inline=False)
@@ -150,7 +126,7 @@ async def on_message(message):
       a = [i.replace("\n",'') for i in f.readlines()]
       result = "\n".join(a)
       if result=="": result="None"
-      embedVar = discord.Embed(title="", description="",color=0xFFCDD2)
+      embedVar = discord.Embed(title="", description="",color=0xC8E6C9)
       embedVar.add_field(name="Watchlist", value=result, inline=False)
       await message.channel.send(embed=embedVar)
 
