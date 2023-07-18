@@ -59,22 +59,40 @@ async def on_message(message):
         return
     
     if message.content.startswith("$film") or message.content.startswith("$tv"):
-      await message.add_reaction("👍")
       a = message.content[3:]
       result = movie(a)
-      embedVar = discord.Embed(title=str(result[3]), description=str(result[0]),color=0xF6BE00) 
-      embedVar.set_footer(text=result[1])
-      embedVar.set_thumbnail(url=result[2])
-      await message.channel.send(embed=embedVar)
+
+      if result: 
+          await message.add_reaction("👍")
+          a = a.title()
+          embedVar = discord.Embed(title=a, description=result, color=0xC8E6C9)
+          embedVar.set_footer(text=result[1])
+          embedVar.set_thumbnail(url=result[2])
+          await message.channel.send(embed=embedVar)
+           
+      else:
+          await message.add_reaction("👎")
+          embed = discord.Embed(title="Page Unavailable", description="Try different prompt.", color=0xFFCDD2)
+          await message.channel.send(embed=embed)
+
 
     if message.content.startswith("$list"):
-      await message.add_reaction("👍")
       a = message.content[3:]
       result = person(a)
       result = result.replace("()","")
-      embedVar = discord.Embed(title="", description="",color=0xF6BE00)
-      embedVar.add_field(name="Filmography", value=result, inline=False)
-      await message.channel.send(embed=embedVar)
+
+      if result: 
+          await message.add_reaction("👍")
+          a = a.title()
+          embedVar = discord.Embed(title="", description="",color=0xFFCDD2)
+          embedVar.add_field(name="Filmography", value=result, inline=False)
+          await message.channel.send(embed=embedVar)
+           
+      else:
+          await message.add_reaction("👎")
+          embed = discord.Embed(title="Page Unavailable", description="Try different prompt.", color=0xFFCDD2)
+          await message.channel.send(embed=embed)
+
 
     if message.content.startswith("$top"):
       await message.add_reaction("👍")
@@ -82,9 +100,18 @@ async def on_message(message):
       result = top(a)
       if a=="popular":
         a += " movies"
-      embedVar = discord.Embed(title="", description="",color=0xF6BE00)
-      embedVar.add_field(name="Top {0}".format(a.capitalize()), value=result, inline=False)
-      await message.channel.send(embed=embedVar)
+    
+      if result: 
+          await message.add_reaction("👍")
+          embedVar = discord.Embed(title="", description="",color=0xFFCDD2)
+          embedVar.add_field(name="Top {0}".format(a.capitalize()), value=result, inline=False)
+          await message.channel.send(embed=embedVar)
+           
+      else:
+          await message.add_reaction("👎")
+          embed = discord.Embed(title="Page Unavailable", description="Try different prompt.", color=0xFFCDD2)
+          await message.channel.send(embed=embed)
+
 
     if message.content.startswith("$help"):
         await message.add_reaction("👍")
